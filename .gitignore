@@ -1,0 +1,25 @@
+# Binaries
+doorbell-proxy
+doorbell-proxy-linux-arm64
+kasa2onvif
+kasa2onvif-linux-arm64
+testcam
+*.exe
+*.test
+*.out
+
+# Real configuration — contains camera/account credentials.
+# Commit config.example.yaml instead; cp config.example.yaml config.yaml
+cfg.yaml
+config.yaml
+deploy/*.staging
+*.new
+
+# Logs
+*.log
+
+# Editor / OS
+.idea/
+*.swp
+*.swo
+.DS_Store

@@ -1,0 +1,65 @@
+# kasa2onvif - example configuration
+#
+# Copy to config.yaml and fill in your credentials:
+#   cp config.example.yaml config.yaml
+#
+
+source:
+  # Replace with your camera host (IP or mDNS name), e-mail and password.
+  # resolution: "hd" (main stream) or "sd" (sub stream, if available)
+  kasa: "kasa://you%40example.com:YourPassword@kd110.local:19443/https/stream/mixed?video=h264&audio=g711&resolution=hd"
+  # optional: deviceId (returned by the proxy's UPnP/broadcast discovery or
+  # the Kasa app); when set it is appended to the stream request
+  # deviceId: "0000000000000000000000000000000000000000"
+
+# Interface whose IPv4 address is advertised in ONVIF/WS-Discovery XAddrs.
+network_interface:
+  name: "eth0"
+
+# Internal RTSP server (consumed by UniFi Protect after adoption).
+# NOTE: Protect may reuse the ONVIF credentials below on the RTSP URI- 
+# the proxy accepts BOTH credential pairs.
+rtsp:
+  listen: ":8554"
+  username: "doorbell"
+  password: "CHANGE_ME_rtsp"
+  realm: "kasa2onvif"
+  paths:
+    - "doorcam"
+
+# ONVIF device service (wraps the RTSP stream). UniFi Protect uses these
+# credentials when adopting the camera.
+onvif:
+  username: "onvif"
+  password: "CHANGE_ME_onvif"
+  name: "Kasa Doorbell"
+  manufacturer: "TP-Link"
+  model: "KD110"
+  firmware: "1.0.0"
+  serial: "KD110-000001"
+  # hardware: ""
+  # mac: "00:11:22:33:44:55"   # leave unset -> a valid placeholder is used
+  # Explicit stream dims Protect shows in adoption metadata (leave unset to
+  # use the parsed SPS / defaults; KD110 hd decodes as 1280x720)
+  width: 1280
+  height: 720
+  # profile: "PROFILE_000"
+  # Set rtsp_host when the auto-detected local IP is wrong (e.g. behind NAT):
+  # rtsp_host: "192.168.1.50"
+  # rtsp_port: defaults to the rtsp.listen port
+  # rtsp_port: 8554
+
+# WS-Discovery responder (UDP 3702): lets Protect find the camera
+# automatically. Advanced Adoption by IP always works.
+discovery:
+  enabled: true
+  listen: ":3702"
+
+# Admin HTTP API + ONVIF SOAP endpoint share this listener.
+api:
+  listen: ":8080"
+
+log:
+  level: "info"
+  # stats: log throughput every N seconds (0 = off)
+  stats: 30

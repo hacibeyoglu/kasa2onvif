@@ -1,0 +1,24 @@
+[Unit]
+Description=Kasa Doorbell RTSP/ONVIF proxy (kasa2onvif)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=onvif
+Group=onvif
+WorkingDirectory=/home/onvif
+ExecStart=/home/onvif/kasa2onvif -config /home/onvif/config.yaml
+Restart=always
+RestartSec=5
+# Streaming hardening
+Nice=-5
+LimitNOFILE=8192
+# Minimal hardening
+NoNewPrivileges=true
+ProtectSystem=full
+ProtectHome=read-only
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
